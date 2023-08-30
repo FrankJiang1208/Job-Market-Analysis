@@ -3,5 +3,4 @@ boto3
 pandas
 nltk
 numpy
-sklearn
 matplotlib
