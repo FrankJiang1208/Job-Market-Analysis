@@ -5,15 +5,6 @@ import numpy as np
 import re
 from nltk.corpus import stopwords
 import matplotlib.pyplot as plt
-from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import FeatureUnion
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import confusion_matrix
 import joblib
 
 
@@ -80,8 +71,8 @@ def seniority(s):
         if s in i:
             ldict[i]=1
     return ldict
-# Use pickle to load in the pre-trained model.
-model=joblib.load( 'salary_predict_model1.pkl')
+# # Use pickle to load in the pre-trained model.
+# model=joblib.load( 'salary_predict_model1.pkl')
 
 
 app = Flask(__name__)
@@ -125,23 +116,23 @@ def gj():
     return render_template("cpj_gov_jobs.html")
 
 
-@app.route('/salary_prediction',methods=['GET', 'POST'])
-def sp():
-    if request.method == 'POST':
-        names = request.form.to_dict()
-        skill=skill_check(names)
-        job=job_title(names["titles"])
-        cat=category(names["industry"])
-        state=state1(names["state"])
-        sen=seniority(names["seniority"])
-        input=list(skill.values())+list(job.values())+list(cat.values())+list(state.values())+list(sen.values())
-        df=pd.DataFrame([input],columns=column_list)
-        pred=salary_category( model.predict(df)[0])
-        return render_template('salary_prediction_sj.html',pred=pred)
-    elif request.method=='GET':
-        return render_template('salary_prediction_sj.html')
-    else:
-        return render_template('salary_prediction_sj.html')
+# @app.route('/salary_prediction',methods=['GET', 'POST'])
+# def sp():
+#     if request.method == 'POST':
+#         names = request.form.to_dict()
+#         skill=skill_check(names)
+#         job=job_title(names["titles"])
+#         cat=category(names["industry"])
+#         state=state1(names["state"])
+#         sen=seniority(names["seniority"])
+#         input=list(skill.values())+list(job.values())+list(cat.values())+list(state.values())+list(sen.values())
+#         df=pd.DataFrame([input],columns=column_list)
+#         pred=salary_category( model.predict(df)[0])
+#         return render_template('salary_prediction_sj.html',pred=pred)
+#     elif request.method=='GET':
+#         return render_template('salary_prediction_sj.html')
+#     else:
+#         return render_template('salary_prediction_sj.html')
 
 
 if __name__ == "__main__":
